@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Coffee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .order-form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        .order-form h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .order-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .order-form input, .order-form select, .order-form button {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .order-form button {
+            background-color: #986436;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .order-form button:hover {
+            background-color: #ffbf00;
+        }
+    </style>
+</head>
+<body>
+    <form class="order-form">
+        <h1>Order Your Coffee</h1>
+
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="coffee-type">Coffee Type</label>
+        <select id="coffee-type" name="coffee-type" required>
+            <option value="">Select coffee</option>
+            <option value="espresso">Espresso</option>
+            <option value="americano">Espresso Matcha</option>
+            <option value="americano">Nước lọc đóng chai</option>
+            <option value="latte">Latte</option>
+            <option value="cappuccino">Cappuccino</option>
+            <option value="mocha"> Mocha Chocolate</option>
+        </select>
+
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="quantity" min="1" placeholder="Enter quantity" required>
+
+        <label for="note">Special Instructions</label>
+        <textarea id="note" name="note" rows="3" placeholder="Any special requests?"></textarea>
+
+        <button type="submit">Đặt hàng </button>
+    </form>
+</body>
+</html>

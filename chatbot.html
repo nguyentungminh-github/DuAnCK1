@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Chat Bot</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f3e5d0;
+      margin: 0;
+    }
+
+    .coffee-chat {
+      position: relative;
+      width: 800px;
+      height: 500px;
+    }
+
+    .cup {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #b5838d;
+      border-radius: 20px 20px 40px 40px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      background: #f0d9b5;
+      padding: 10px;
+      border-radius: 1px;
+      font-size: 14px;
+    }
+
+    .message.user {
+      background: #d9a373;
+      align-self: flex-end;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background: #f0d9b5;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 2px;
+      margin-right: 10px;
+    }
+
+    .input-area button {
+      padding: 10px 20px;
+      background: #b5838d;
+      color: white;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="coffee-chat">
+    <h1 style ="text-align: center;">CAFE AI - TƯ VẤN MỌI THỨ VỀ CAFE</h1>
+    <div class="cup">
+      <div class="messages" id="messages">
+      </div>
+      <div class="input-area">
+        <input type="text" id="userInput" placeholder="Gõ tin nhắn..." />
+        <button id="sendButton">Gửi</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+  <script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+
+    // Your API key (replace with your actual API key)
+    const API_KEY = "AIzaSyB6xqZwGjcgDfvA99EstvTAUXggvw_5yeo";
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+    // Elements
+    const messagesDiv = document.getElementById("messages");
+    const userInput = document.getElementById("userInput");
+    const sendButton = document.getElementById("sendButton");
+
+    // Function to send a message
+    async function sendMessage() {
+      const userMessage = userInput.value.trim();
+      if (!userMessage) return;
+
+      // Add user's message to the chat
+      addMessage(userMessage, "user");
+
+      // Clear input field
+      userInput.value = "";
+
+      // Call Google Generative AI
+      try {
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent(userMessage);
+        const response = await result.response;
+        const botMessage = await response.text();
+
+        // Add bot's response to the chat
+        addMessage(botMessage, "bot");
+      } catch (error) {
+        console.error("Error generating response:", error);
+        addMessage("Xin lỗi, bot đang gặp sự cố!", "bot");
+      }
+    }
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `message ${sender}`;
+      messageDiv.textContent = text;
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight; 
+    }
+
+    // Event listeners
+    sendButton.addEventListener("click", sendMessage);
+    userInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") sendMessage();
+    });
+    // Hàm để chặn sự kiện
+    function blockMouseAndF12() {
+      // Chặn chuột trái
+      document.addEventListener('contextmenu', (event) => {
+        event.preventDefault(); // Ngăn menu chuột phải
+      });
+
+      document.addEventListener('mousedown', (event) => {
+        if (event.button === 2) { 
+          event.preventDefault(); 
+          alert("Chuột phải đã bị chặn!");
+        }
+      });
+
+      // Chặn phím F12
+      document.addEventListener('keydown', (event) => {
+        if (event.key === "F12" || event.keyCode === 123) { // F12
+          event.preventDefault(); // Ngăn mở DevTools
+          alert("F12 đã bị chặn!");
+        }
+      });
+    }
+    // Gọi hàm để kích hoạt chặn
+    blockMouseAndF12();
+  </script>
+</body>
+</html>
